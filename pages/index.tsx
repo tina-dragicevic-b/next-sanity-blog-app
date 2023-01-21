@@ -1,16 +1,43 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
+import type { NextPage } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import Link from "next/link";
+import { render } from "react-dom";
+import Header from "../components/Header";
+import MainPost from "../components/MainPost";
+import Posts from "../components/Posts";
+import { sanityClient, urlFor } from "../sanity";
+import { Post } from "../typings";
 
-const Home: NextPage = () => {
+interface Props {
+  allPosts: [Post];
+}
+// const Home: NextPage<Props> = ( props ) => {
+//   console.log(props.allPosts)
+const Home: NextPage<Props> = ({ allPosts }) => {
+  
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
+    // <div className="flex min-h-screen flex-col items-center justify-center py-2">
+    <div className="max-w-8xl mx-auto">
       <Head>
-        <title>Create Next App</title>
+        <title>Sanity blog app</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
+      <Header />
+      <MainPost></MainPost>
+      <div>
+        {allPosts.map( post => (
+          <Posts key={post._id} post={post}>
+          </Posts>
+        ))}
+
+        {/* {allPosts.map( post => {
+          return <Link key={post._id} href=""/>
+        })} */}
+      </div>
+      <main>{/* <div>Tinicaaa {'<3'}</div> */}</main>
+      {/* <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
         <h1 className="text-6xl font-bold">
           Welcome to{' '}
           <a className="text-blue-600" href="https://nextjs.org">
@@ -66,7 +93,7 @@ const Home: NextPage = () => {
             </p>
           </a>
         </div>
-      </main>
+      </main> */}
 
       <footer className="flex h-24 w-full items-center justify-center border-t">
         <a
@@ -75,12 +102,33 @@ const Home: NextPage = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by{" "}
           <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
         </a>
       </footer>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
+
+export const getServerSideProps = async () => {
+  const query = `*[_type == "post"]{
+    _id,
+      title,
+      slug,
+      author -> {
+        name, image
+      },
+      description,
+      mainImage
+  }`;
+
+  const allPosts = await sanityClient.fetch(query);
+
+  return {
+    props: {
+      allPosts,
+    },
+  };
+};
