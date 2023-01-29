@@ -19,7 +19,7 @@ function Header() {
             </div>
         </div>
         <div className="flex items-end space-x-9 text-green-900">
-          <h3>
+          <h3 className="border px-4 py-1 border-white">
             Sing In
           </h3>
           <h3 className="border px-4 py-1 rounded-full border-green-900">Get Started</h3>

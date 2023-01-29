@@ -15,7 +15,6 @@ interface Props {
 // const Home: NextPage<Props> = ( props ) => {
 //   console.log(props.allPosts)
 const Home: NextPage<Props> = ({ allPosts }) => {
-  
   return (
     // <div className="flex min-h-screen flex-col items-center justify-center py-2">
     <div className="max-w-8xl mx-auto">
@@ -26,10 +25,9 @@ const Home: NextPage<Props> = ({ allPosts }) => {
 
       <Header />
       <MainPost></MainPost>
-      <div>
-        {allPosts.map( post => (
-          <Posts key={post._id} post={post}>
-          </Posts>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6 p-2 md:p-6">
+        {allPosts.map((post) => (
+          <Posts key={post._id} post={post}></Posts>
         ))}
 
         {/* {allPosts.map( post => {
